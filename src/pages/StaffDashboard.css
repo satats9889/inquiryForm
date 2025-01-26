@@ -1,0 +1,44 @@
+.dashboard-container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  h1 {
+    font-size: 24px;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .inquiry-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .inquiry-item {
+    padding: 15px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  .inquiry-item:hover {
+    background: #e6e6e6;
+  }
+  
+  .inquiry-header {
+    font-size: 14px;
+    color: #888;
+    margin-bottom: 8px;
+  }
+  
+  .inquiry-content {
+    font-size: 16px;
+    color: #333;
+  }
