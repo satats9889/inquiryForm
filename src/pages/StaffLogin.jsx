@@ -1,67 +1,39 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import "./StaffLogin.css";
 
-const StaffLogin = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+function StaffLogin() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
+  const auth = getAuth();
 
-  // 仮のFirebase初期化設定
-  const auth = getAuth(); // Firebase Authenticationのインスタンス
-
-  const handleLogin = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setError("");
-
-    try {
-      // Firebase Authenticationによるログイン
-      await signInWithEmailAndPassword(auth, email, password);
-      alert("ログインに成功しました！");
-      // スタッフ管理画面へ遷移 (仮)
-      window.location.href = "/staff/dashboard";
-    } catch (err) {
-      setError("ログインに失敗しました。メールアドレスまたはパスワードをご確認ください。");
-      console.error(err);
-    }
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in 
+        const user = userCredential.user;
+        console.log(user);
+        localStorage.setItem('token', user.accessToken); // Store token (replace with your actual token storage)
+        navigate('/staff-inquiry-management');
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode, errorMessage)
+        setError("ログインできませんでした")
+      });
   };
 
   return (
-    <div className="login-container">
-      <h1>スタッフログイン</h1>
-      <form onSubmit={handleLogin}>
-        <div className="form-group">
-          <label htmlFor="email">メールアドレス</label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="メールアドレスを入力してください"
-            required
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="password">パスワード</label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="パスワードを入力してください"
-            required
-          />
-        </div>
-
-        {error && <span className="error">{error}</span>}
-
-        <button type="submit" className="login-button">
-          ログイン
-        </button>
-      </form>
-    </div>
+    <form onSubmit={handleSubmit}>
+      {/* Form inputs */}
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+      <button type="submit">Login</button>
+    </form>
   );
-};
+}
 
 export default StaffLogin;
